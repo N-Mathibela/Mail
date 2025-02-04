@@ -28,7 +28,7 @@ app.post('/contact', (req, res) => {
 
   const mailOptions = {
     from: 'info@isizwesiyakha.org',
-    to: 'info@isizwesiyakha.org',
+    to: 'web@isizwesiyakha.org',
     replyTo: email,
     subject: subject,
     html: `
@@ -40,11 +40,14 @@ app.post('/contact', (req, res) => {
 
   transporter.sendMail(mailOptions, (error, info) => {
     if (error) {
-      console.error('Error sending email:', error);
-      res.status(500).json({ message: 'Error sending email' });
+      console.error("Error sending email:", error);
+      if (error.message) console.error("Error message:", error.message);
+      if (error.responseCode) console.error("Response code:", error.responseCode);
+      if (error.response) console.error("SMTP Response:", error.response); // VERY IMPORTANT
+      res.status(500).json({ message: "Error sending email" });
     } else {
-      console.log('Email sent:', info.response);
-      res.status(200).json({ message: 'Email sent successfully' });
+      console.log("Email sent:", info.response);
+      res.status(200).json({ message: "Email sent successfully" });
     }
   });
 });
